@@ -132,15 +132,7 @@ export default function ProductListing() {
   const totalPages = Math.max(1, Math.ceil((totalCount || 0) / ITEMS_PER_PAGE));
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1).slice(0, 5);
 
-  if (error) {
-    return (
-      <div className="w-full max-w-7xl mx-auto pt-6 pb-12 px-2 md:px-4">
-        <ErrorState onRetry={() => {
-          dispatch(fetchProducts({ limit: 12, skip: (page - 1) * 12 }));
-        }} />
-      </div>
-    );
-  }
+
 
   return (
     <div className="w-full max-w-7xl mx-auto pt-3 pb-8 px-2 md:px-4">
@@ -207,6 +199,22 @@ export default function ProductListing() {
                      <SkeletonCard />
                   </div>
                 ))}
+              </div>
+            ) : error ? (
+              <div className="w-full py-12">
+                <ErrorState onRetry={() => {
+                  dispatch(fetchProducts({ 
+                    limit: 12, 
+                    page, 
+                    category, 
+                    search, 
+                    minPrice: priceMin, 
+                    maxPrice: priceMax, 
+                    sort, 
+                    brands, 
+                    rating 
+                  }));
+                }} />
               </div>
             ) : products?.length === 0 ? (
               <div className="w-full h-[400px] flex flex-col items-center justify-center text-center">

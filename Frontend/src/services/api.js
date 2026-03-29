@@ -35,12 +35,40 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor — unwrap data
+// Response interceptor — unwrap data and handle retries
 api.interceptors.response.use(
   (response) => response.data,
-  (error) => {
-    const message = error.response?.data?.message || error.message || 'Something went wrong';
-    return Promise.reject(new Error(message));
+  async (error) => {
+    const config = error.config;
+    
+    // If config does not exist or retry option is not set, reject
+    if (!config || !config.method === 'get') {
+      const message = error.response?.data?.message || error.message || 'Something went wrong';
+      return Promise.reject(new Error(message));
+    }
+
+    // Set the variable for keeping track of the retry count
+    config.__retryCount = config.__retryCount || 0;
+
+    // Check if we've maxed out the total number of retries
+    if (config.__retryCount >= 3) {
+      const message = error.response?.data?.message || error.message || 'Something went wrong';
+      return Promise.reject(new Error(message));
+    }
+
+    // Increase the retry count
+    config.__retryCount += 1;
+
+    // Create new promise to handle exponential backoff
+    const backoff = new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 1000 * config.__retryCount); // 1s, 2s, 3s backoff
+    });
+
+    // Return the promise in which recalls axios to retry the request
+    await backoff;
+    return api(config);
   }
 );
 

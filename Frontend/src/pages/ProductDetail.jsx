@@ -263,13 +263,7 @@ export default function ProductDetail() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="w-full max-w-7xl mx-auto pt-6 pb-20 px-4">
-        <ErrorState onRetry={() => dispatch(fetchProductById(id))} />
-      </div>
-    );
-  }
+
 
   const images = product.images?.length > 0 ? product.images : (product.image ? [product.image] : []);
   const title = product.title || product.name || '';
@@ -307,10 +301,18 @@ export default function ProductDetail() {
         <div className="text-xs text-flipsecondary mb-2 mx-4 flex items-center gap-1 font-medium tracking-wide">
           <Link to="/" className="hover:text-flipblue">Home</Link>
           <span className="opacity-70">›</span>
-          <span className="truncate">{title}</span>
+          <span className="truncate">{error ? 'Error' : title}</span>
         </div>
 
-        {/* Main Panel */}
+        {error && (
+          <div className="mx-4 mt-2 mb-6">
+            <ErrorState onRetry={() => dispatch(fetchProductById(id))} />
+          </div>
+        )}
+
+        {!error && (
+          <>
+            {/* Main Panel */}
         <div className="bg-white flex flex-col md:flex-row mx-4 shadow-sm rounded-sm">
 
           {/* LEFT */}
@@ -595,6 +597,8 @@ export default function ProductDetail() {
             )}
           </div>
         </div>
+          </>
+        )}
       </div>
     </>
   );

@@ -125,13 +125,7 @@ export default function Home() {
   const scrollSuggested = (dir) =>
     suggestedRef.current?.scrollBy({ left: dir * 260, behavior: 'smooth' });
 
-  if (error) {
-    return (
-      <div className="max-w-[1360px] mx-auto pt-6 px-4">
-        <ErrorState onRetry={() => dispatch(fetchProducts({ limit: 20 }))} />
-      </div>
-    );
-  }
+
 
   const cur = BANNER_SLIDES[slide];
 
@@ -279,11 +273,14 @@ export default function Home() {
               ? Array.from({ length: 7 }).map((_, i) => (
                   <div key={i} className="flex-shrink-0"><SkeletonCard /></div>
                 ))
-              : products?.slice(0, 10).map((p) => (
-                  <div key={p.id} className="flex-shrink-0">
-                    <ProductCard product={p} onAddToCart={handleAddToCart} />
-                  </div>
-                ))}
+              : error 
+                ? <div className="w-full py-2 px-2"><ErrorState onRetry={() => dispatch(fetchProducts({ limit: 20 }))} /></div>
+                : products?.slice(0, 10).map((p) => (
+                    <div key={p.id} className="flex-shrink-0">
+                      <ProductCard product={p} onAddToCart={handleAddToCart} />
+                    </div>
+                  ))
+            }
           </div>
         </div>
 
@@ -298,11 +295,14 @@ export default function Home() {
               ? Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="flex justify-center w-full"><SkeletonCard /></div>
                 ))
-              : products?.slice(10, 20).map((p) => (
-                  <div key={p.id} className="flex justify-center w-full">
-                    <ProductCard product={p} onAddToCart={handleAddToCart} />
-                  </div>
-                ))}
+              : error 
+                ? <div className="col-span-full py-4"><ErrorState onRetry={() => dispatch(fetchProducts({ limit: 20 }))} /></div>
+                : products?.slice(10, 20).map((p) => (
+                    <div key={p.id} className="flex justify-center w-full">
+                      <ProductCard product={p} onAddToCart={handleAddToCart} />
+                    </div>
+                  ))
+            }
           </div>
         </div>
 
