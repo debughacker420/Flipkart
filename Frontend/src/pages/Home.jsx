@@ -140,10 +140,10 @@ export default function Home() {
       <div className="max-w-[1360px] mx-auto px-2 pt-3 space-y-3">
 
         {/* ── HERO BANNER ── */}
-        <div className="grid grid-cols-[1fr_2fr_1fr] bg-white shadow-sm overflow-hidden" style={{ height: 280 }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr_1fr] bg-white shadow-sm overflow-hidden" style={{ minHeight: 280 }}>
 
           {/* Left static card */}
-          <div className="bg-[#FCE4EC] flex flex-col justify-between p-6 border-r border-gray-100">
+          <div className="hidden lg:flex bg-[#FCE4EC] flex-col justify-between p-6 border-r border-gray-100">
             <div>
               <p className="text-[10px] font-bold text-pink-400 uppercase tracking-widest mb-1">Today's Pick</p>
               <h2 className="text-xl font-bold text-gray-900 leading-tight">Baby Diapers</h2>
@@ -206,7 +206,7 @@ export default function Home() {
           </div>
 
           {/* Right static card */}
-          <div className="bg-[#EEF2FF] flex flex-col justify-between p-6 border-l border-gray-100">
+          <div className="hidden lg:flex bg-[#EEF2FF] flex-col justify-between p-6 border-l border-gray-100">
             <div>
               <p className="font-black text-sm tracking-[0.2em] opacity-50 mb-1 uppercase">Samsung</p>
               <h2 className="text-xl font-bold text-gray-900 leading-tight">Galaxy Book4</h2>
@@ -222,12 +222,12 @@ export default function Home() {
         </div>
 
         {/* ── AD CARDS ── */}
-        <div className="grid grid-cols-3 bg-white shadow-sm overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 bg-white shadow-sm overflow-hidden">
           {AD_CARDS.map((ad, i) => (
             <div
               key={i}
-              className={`flex items-center gap-4 px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                i < 2 ? 'border-r border-gray-100' : ''
+              className={`flex flex-row items-center gap-4 px-5 py-4 cursor-pointer hover:bg-gray-50 transition-colors ${
+                i < 2 ? 'border-b md:border-b-0 md:border-r border-gray-100' : ''
               }`}
             >
               <div
