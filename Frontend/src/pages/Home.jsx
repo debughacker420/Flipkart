@@ -293,13 +293,13 @@ export default function Home() {
             <h2 className="text-xl font-bold text-gray-900">Best Sellers in Electronics</h2>
             <button className="text-sm font-semibold text-[#2874F0] hover:underline">VIEW ALL</button>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 divide-x divide-y divide-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 p-2 sm:p-4 bg-gray-50/30">
             {loading
               ? Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className="flex justify-center p-4"><SkeletonCard /></div>
+                  <div key={i} className="flex justify-center w-full"><SkeletonCard /></div>
                 ))
               : products?.slice(10, 20).map((p) => (
-                  <div key={p.id} className="flex justify-center p-3 hover:bg-gray-50 transition-colors">
+                  <div key={p.id} className="flex justify-center w-full">
                     <ProductCard product={p} onAddToCart={handleAddToCart} />
                   </div>
                 ))}
