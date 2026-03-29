@@ -24,7 +24,7 @@ export default function ImageCarousel({ images = [] }) {
   };
 
   return (
-    <div className="w-full max-w-[400px] flex-shrink-0 flex flex-col mx-auto">
+    <div className="w-full min-w-0 max-w-[400px] flex flex-col mx-auto">
       {/* Main Image */}
       <div className="relative w-full aspect-square max-h-[400px] border border-flipborder bg-white group overflow-hidden flex items-center justify-center">
         <img 

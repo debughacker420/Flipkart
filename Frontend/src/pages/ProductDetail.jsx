@@ -314,8 +314,8 @@ export default function ProductDetail() {
         <div className="bg-white flex flex-col md:flex-row mx-4 shadow-sm rounded-sm">
 
           {/* LEFT */}
-          <div className="w-full md:w-[450px] shrink-0 sticky top-[64px] self-start border-r border-transparent md:border-flipborder flex flex-col p-4 z-10 bg-white">
-            <div className="mx-auto relative">
+          <div className="w-full min-w-0 md:w-[450px] shrink-0 sticky top-[64px] self-start border-r border-transparent md:border-flipborder flex flex-col p-4 z-10 bg-white">
+            <div className="mx-auto relative w-full">
               <ImageCarousel images={images} />
               {/* Wishlist on image */}
               <button
