@@ -63,15 +63,6 @@ const protect = async (req, res, next) => {
   }
 };
 
-const getEffectiveUserId = (req) => {
-  if (req.user?.id) return req.user.id;
-  
-  const guestId = req.headers['x-guest-id'];
-  if (guestId && guestId !== 'null' && guestId !== 'undefined') {
-    return guestId;
-  }
-  
-  return process.env.DEFAULT_USER_ID;
-};
+const getEffectiveUserId = (req) => req.user?.id;
 
 module.exports = { protect, optionalAuth, getEffectiveUserId };

@@ -23,7 +23,14 @@ export default function ProductCard({ product, onAddToCart }) {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    if (!outOfStock && onAddToCart) onAddToCart(id);
+    if (!isAuthenticated) {
+      dispatch(openLoginModal('login'));
+      toast('Please login to add items to cart');
+      return;
+    }
+    if (!outOfStock && onAddToCart) {
+      onAddToCart(id);
+    }
   };
 
   const handleWishlist = (e) => {

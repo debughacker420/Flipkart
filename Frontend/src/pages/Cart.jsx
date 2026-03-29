@@ -1,21 +1,41 @@
-import React, { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { openLoginModal } from '../redux/authSlice';
 import { fetchCart, updateItem, removeItem } from '../redux/cartSlice';
-import { ShoppingCart } from 'lucide-react';
-import CartItem from '../components/CartItem/CartItem';
-import PriceSummary from '../components/PriceSummary/PriceSummary';
-import ErrorState from '../components/ErrorState/ErrorState';
+import { ShoppingCart, LogIn } from 'lucide-react';
 
 export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items, loading, error } = useSelector((state) => state.cart);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(fetchCart());
-    window.scrollTo(0, 0); // Stabilize UI bounds upon initial navigation
-  }, [dispatch]);
+    if (isAuthenticated) {
+      dispatch(fetchCart());
+    }
+    window.scrollTo(0, 0);
+  }, [dispatch, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="w-full max-w-7xl mx-auto pt-4 pb-12 px-2 md:px-4">
+        <div className="bg-white m-0 sm:m-4 flex flex-col items-center justify-center py-[70px] shadow-[0_1px_2px_rgba(0,0,0,0.1)] rounded-sm min-h-[400px]">
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+            <LogIn className="w-10 h-10 text-flipblue" />
+          </div>
+          <h2 className="text-[20px] font-bold text-flipprimary tracking-wide">Login to see your cart</h2>
+          <p className="text-flipsecondary text-sm mt-3 font-medium max-w-[300px] text-center">
+            Login to see the items you added previously or to add new items.
+          </p>
+          <button 
+            onClick={() => dispatch(openLoginModal())}
+            className="bg-fliporange text-white px-16 py-3 mt-8 font-bold shadow-sm rounded-[2px] hover:shadow-md transition-shadow text-[15px] uppercase tracking-wide"
+          >
+            Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handleQuantityChange = (id, newQty) => {
     dispatch(updateItem({ itemId: id, quantity: newQty }));

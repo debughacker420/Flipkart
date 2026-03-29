@@ -358,8 +358,11 @@ export default function Navbar() {
               </button>
 
               {/* Wishlist */}
-              <Link
-                to="/account/wishlist"
+              <button
+                onClick={() => {
+                  if (!isAuthenticated) dispatch(openLoginModal('login'));
+                  else navigate('/account/wishlist');
+                }}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl hover:bg-gray-50 transition relative"
               >
                 <div className="relative">
@@ -371,11 +374,14 @@ export default function Navbar() {
                   )}
                 </div>
                 <span className="hidden lg:block text-[13px] font-semibold text-gray-800">Wishlist</span>
-              </Link>
+              </button>
 
               {/* Cart */}
-              <Link
-                to="/cart"
+              <button
+                onClick={() => {
+                  if (!isAuthenticated) dispatch(openLoginModal('login'));
+                  else navigate('/cart');
+                }}
                 className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl hover:bg-gray-50 transition relative"
               >
                 <div className="relative">
@@ -387,20 +393,26 @@ export default function Navbar() {
                   )}
                 </div>
                 <span className="hidden lg:block text-[13px] font-semibold text-gray-800">Cart</span>
-              </Link>
+              </button>
             </div>
 
             {/* ── Mobile right actions ── */}
             <div className="flex sm:hidden items-center gap-1">
               {/* Cart */}
-              <Link to="/cart" className="relative p-2 rounded-xl hover:bg-gray-50 transition">
+              <button 
+                onClick={() => {
+                  if (!isAuthenticated) dispatch(openLoginModal('login'));
+                  else navigate('/cart');
+                }} 
+                className="relative p-2 rounded-xl hover:bg-gray-50 transition"
+              >
                 <ShoppingCart className="w-5 h-5 text-gray-700" />
                 {cartCount > 0 && (
                   <span className="absolute top-0.5 right-0.5 min-w-[16px] h-4 bg-[#FF6161] text-white text-[9px] font-bold rounded-full flex items-center justify-center px-0.5 border border-white">
                     {cartCount}
                   </span>
                 )}
-              </Link>
+              </button>
 
               {/* Hamburger menu */}
               <button

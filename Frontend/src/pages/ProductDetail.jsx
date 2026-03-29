@@ -340,13 +340,29 @@ export default function ProductDetail() {
             ) : (
               <div className="flex gap-2 w-full mt-4 flex-col sm:flex-row px-4 md:px-0">
                 <button
-                  onClick={() => { dispatch(addItemToCart({ productId: id, quantity: qty })); toast.success('Added to cart! 🛒'); }}
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      dispatch(openLoginModal('login'));
+                      toast('Please login to add items to cart');
+                      return;
+                    }
+                    dispatch(addItemToCart({ productId: id, quantity: qty })); 
+                    toast.success('Added to cart! 🛒');
+                  }}
                   className="flex-1 bg-flipyellow text-white font-bold py-3.5 px-4 text-[15px] flex items-center justify-center gap-2 hover:bg-yellow-500 transition rounded-sm shadow-sm"
                 >
                   <span className="text-lg">🛒</span> ADD TO CART
                 </button>
                 <button
-                  onClick={() => { dispatch(addItemToCart({ productId: id, quantity: qty })); navigate('/checkout'); }}
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      dispatch(openLoginModal('login'));
+                      toast('Please login to purchase items');
+                      return;
+                    }
+                    dispatch(addItemToCart({ productId: id, quantity: qty })); 
+                    navigate('/checkout');
+                  }}
                   className="flex-1 bg-fliporange text-white font-bold py-3.5 px-4 text-[15px] flex items-center justify-center gap-2 hover:bg-orange-600 transition rounded-sm shadow-sm mt-2 sm:mt-0"
                 >
                   <span className="text-lg">⚡</span> BUY NOW

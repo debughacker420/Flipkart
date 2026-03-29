@@ -7,22 +7,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 require('./db/connection'); // Test connection on startup
-const { query } = require('./db/connection');
 const { errorHandler } = require('./middleware/errorHandler');
-
-// ── Self-Healing Database Fix ───────────────────────────────
-// Removes FK constraints to allow unique guest carts
-const fixDatabaseConstraints = async () => {
-  try {
-    console.log('⚙️ Checking database constraints...');
-    await query('ALTER TABLE cart_items DROP CONSTRAINT IF EXISTS cart_items_user_id_fkey');
-    await query('ALTER TABLE wishlists DROP CONSTRAINT IF EXISTS wishlists_user_id_fkey');
-    console.log('✅ Database constraints optimized for guest carts');
-  } catch (err) {
-    console.warn('⚠️ Could not auto-optimize constraints (might already be fixed):', err.message);
-  }
-};
-fixDatabaseConstraints();
 
 // Route modules
 const productRoutes = require('./routes/productRoutes');
