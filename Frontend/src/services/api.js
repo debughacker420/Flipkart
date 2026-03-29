@@ -40,8 +40,8 @@ api.interceptors.response.use(
   async (error) => {
     const config = error.config;
     
-    // If config does not exist or retry option is not set, reject
-    if (!config || !config.method === 'get') {
+    // If config does not exist or it's not a GET request, reject immediately (no retry)
+    if (!config || config.method !== 'get') {
       const message = error.response?.data?.message || error.message || 'Something went wrong';
       return Promise.reject(new Error(message));
     }

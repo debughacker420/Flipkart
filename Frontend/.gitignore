@@ -2,6 +2,8 @@ node_modules/
 .DS_Store
 .env
 .env.local
+# Allow .env.production to be committed (contains only public API URL, no secrets)
+!.env.production
 .env.development.local
 .env.test.local
 .env.production.local

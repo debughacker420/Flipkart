@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { optionalAuth } = require('../middleware/authMiddleware');
+const { protect, optionalAuth } = require('../middleware/authMiddleware');
 
 const {
   getCart,
@@ -10,21 +10,19 @@ const {
   clearCart,
 } = require('../controllers/cartController');
 
-router.use(optionalAuth);
+// GET    /api/cart       → full cart with totals (optional auth — returns empty cart for guests)
+router.get('/', optionalAuth, getCart);
 
-// GET    /api/cart       → full cart with totals
-router.get('/', getCart);
+// POST   /api/cart       → add item to cart (requires login)
+router.post('/', protect, addToCart);
 
-// POST   /api/cart       → add item to cart
-router.post('/', addToCart);
+// PUT    /api/cart/:id   → update item quantity (requires login)
+router.put('/:id', protect, updateCartItem);
 
-// PUT    /api/cart/:id   → update item quantity
-router.put('/:id', updateCartItem);
+// DELETE /api/cart/:id   → remove single item (requires login)
+router.delete('/:id', protect, removeCartItem);
 
-// DELETE /api/cart/:id   → remove single item
-router.delete('/:id', removeCartItem);
-
-// DELETE /api/cart       → clear entire cart
-router.delete('/', clearCart);
+// DELETE /api/cart       → clear entire cart (requires login)
+router.delete('/', protect, clearCart);
 
 module.exports = router;
