@@ -79,7 +79,7 @@ const addAddress = async (req, res, next) => {
     }
 
     if (errors.length) {
-      return res.status(400).json({ status: 'error', errors });
+      return res.status(400).json({ status: 'error', message: 'addresss is inavlaid', errors });
     }
 
     // ── If isDefault, unset all existing defaults first ───
