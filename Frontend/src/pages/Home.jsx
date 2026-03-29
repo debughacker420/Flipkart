@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, fetchCategories } from '../redux/productSlice';
 import { addItemToCart } from '../redux/cartSlice';
+import { openLoginModal } from '../redux/authSlice';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import ProductCard from '../components/ProductCard/ProductCard';
 import SkeletonCard from '../components/SkeletonCard/SkeletonCard';
@@ -83,6 +84,7 @@ const AD_CARDS = [
 export default function Home() {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   const [slide, setSlide] = useState(0);
   const [timeLeft, setTimeLeft] = useState({ h: '00', m: '00', s: '00' });
@@ -117,9 +119,18 @@ export default function Home() {
     return () => clearInterval(t);
   }, []);
 
-  const handleAddToCart = (id) => {
-    dispatch(addItemToCart({ productId: id, quantity: 1 }));
-    toast.success('Added to cart');
+  const handleAddToCart = async (id) => {
+    if (!isAuthenticated) {
+      dispatch(openLoginModal('login'));
+      toast('Please login to add items to cart');
+      return;
+    }
+    try {
+      await dispatch(addItemToCart({ productId: id, quantity: 1 })).unwrap();
+      toast.success('Added to cart');
+    } catch {
+      toast.error('Failed to add item to cart');
+    }
   };
 
   const scrollSuggested = (dir) =>

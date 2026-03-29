@@ -27,9 +27,13 @@ export default function Wishlist() {
     toast('Removed from wishlist');
   };
 
-  const handleAddToCart = (productId) => {
-    dispatch(addItemToCart({ productId, quantity: 1 }));
-    toast.success('Added to cart!');
+  const handleAddToCart = async (productId) => {
+    try {
+      await dispatch(addItemToCart({ productId, quantity: 1 })).unwrap();
+      toast.success('Added to cart!');
+    } catch {
+      toast.error('Failed to add item to cart');
+    }
   };
 
   if (!isAuthenticated) {

@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, fetchCategories } from '../redux/productSlice';
 import { addItemToCart } from '../redux/cartSlice';
+import { openLoginModal } from '../redux/authSlice';
 import { getProductBrands } from '../services/api';
 import FilterSidebar from '../components/FilterSidebar/FilterSidebar';
 import ProductCard from '../components/ProductCard/ProductCard';
@@ -22,6 +23,7 @@ export default function ProductListing() {
   const dispatch = useDispatch();
   
   const { products, categories, loading, totalCount, error } = useSelector((state) => state.products);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [availableBrands, setAvailableBrands] = useState([]);
 
   // Parse URL Parameters
@@ -115,9 +117,18 @@ export default function ProductListing() {
     setSearchParams(newParams);
   };
 
-  const handleAddToCart = (id) => {
-    dispatch(addItemToCart({ productId: id, quantity: 1 }));
-    toast.success('Item added to cart! 🛒');
+  const handleAddToCart = async (id) => {
+    if (!isAuthenticated) {
+      dispatch(openLoginModal('login'));
+      toast('Please login to add items to cart');
+      return;
+    }
+    try {
+      await dispatch(addItemToCart({ productId: id, quantity: 1 })).unwrap();
+      toast.success('Item added to cart! 🛒');
+    } catch {
+      toast.error('Failed to add item to cart');
+    }
   };
 
   const currentFilters = {
