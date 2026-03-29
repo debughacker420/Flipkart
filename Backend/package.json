@@ -1,6 +1,6 @@
 {
   "name": "flipkart-clone-backend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend API for Flipkart Clone",
   "main": "server/index.js",
   "scripts": {
