@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getGuestId } from '../utils/storage';
 
 const AUTH_STORAGE_KEY = 'flipkart_auth';
 
@@ -19,7 +20,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   headers: {
     'Content-Type': 'application/json',
-    'x-guest-id': 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', // Default seeded user
+    'x-guest-id': getGuestId(),
   },
 });
 

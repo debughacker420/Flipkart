@@ -149,7 +149,7 @@ CREATE INDEX idx_addresses_default ON addresses(user_id, is_default);
 -- ============================================================
 CREATE TABLE cart_items (
   id            UUID          PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id       UUID          NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id       UUID          NOT NULL, -- REFERENCES users(id) ON DELETE CASCADE (Removed to support guest carts)
   product_id    UUID          NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   quantity      INTEGER       NOT NULL DEFAULT 1 CHECK (quantity >= 1 AND quantity <= 10),
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
@@ -227,7 +227,7 @@ CREATE INDEX idx_order_items_product ON order_items(product_id);
 -- ============================================================
 CREATE TABLE wishlists (
   id            UUID          PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id       UUID          NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id       UUID          NOT NULL, -- REFERENCES users(id) ON DELETE CASCADE (Removed to support guest wishlists)
   product_id    UUID          NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
   UNIQUE (user_id, product_id)
