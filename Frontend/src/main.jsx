@@ -1,4 +1,5 @@
-// FORCE REDEPLOY Frontend - 2026-03-29 21:42 (Login Required Cart)
+// FORCE REDEPLOY - 2026-03-29 20:47
+// Resilience fix for Render cold starts
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'

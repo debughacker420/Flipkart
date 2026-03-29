@@ -1,5 +1,11 @@
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { openLoginModal } from '../redux/authSlice';
 import { fetchCart, updateItem, removeItem } from '../redux/cartSlice';
+import CartItem from '../components/CartItem/CartItem';
+import PriceSummary from '../components/PriceSummary/PriceSummary';
+import ErrorState from '../components/ErrorState/ErrorState';
 import { ShoppingCart, LogIn } from 'lucide-react';
 
 export default function Cart() {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { ArrowRight, LockKeyhole, PackageCheck } from 'lucide-react';
+import { ArrowRight, CheckCircle2, LockKeyhole } from 'lucide-react';
 import AccountLayout from '../components/Account/AccountLayout';
 import { accountPageCopy } from '../constants/accountMenu';
 import { openLoginModal } from '../redux/authSlice';
@@ -13,7 +13,10 @@ export default function AccountPlaceholderPage() {
 
   const pageContent = accountPageCopy[location.pathname] || {
     title: 'Account',
-    description: 'This account section is reserved for a dedicated follow-up implementation.',
+    description: 'This account section is coming soon.',
+    heading: 'Coming soon.',
+    body: 'This section is under development.',
+    features: [],
   };
 
   return (
@@ -25,8 +28,7 @@ export default function AccountPlaceholderPage() {
           </div>
           <h3 className="mt-5 text-2xl font-bold text-slate-900">Login required</h3>
           <p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">
-            Sign in to access your personal account features. This placeholder page is ready and the detailed
-            feature logic can be layered in during the next round.
+            Sign in to access {pageContent.title}. Your data is saved securely to your account.
           </p>
           <button
             type="button"
@@ -39,18 +41,24 @@ export default function AccountPlaceholderPage() {
         </div>
       ) : (
         <div className="grid gap-5 lg:grid-cols-[1.3fr_0.9fr]">
+          {/* Left: section-specific content */}
           <div className="rounded-[28px] border border-slate-100 bg-slate-50/70 p-8">
-            <div className="flex items-center gap-3 text-flipblue">
-              <PackageCheck className="h-5 w-5" />
-              <span className="text-sm font-semibold uppercase tracking-[0.2em]">Placeholder Ready</span>
-            </div>
-            <h3 className="mt-5 text-2xl font-bold text-slate-900">{pageContent.title} is wired into the account shell.</h3>
-            <p className="mt-3 text-sm leading-6 text-slate-600">
-              The navigation, layout, and authenticated entry point are complete. The next step is connecting the
-              section-specific data and actions for this screen.
-            </p>
+            <h3 className="text-2xl font-bold text-slate-900">{pageContent.heading}</h3>
+            <p className="mt-3 text-sm leading-6 text-slate-600">{pageContent.body}</p>
+
+            {pageContent.features?.length > 0 && (
+              <ul className="mt-6 space-y-2.5">
+                {pageContent.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5 text-sm text-slate-700">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-flipgreen" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
+          {/* Right: signed-in user info */}
           <div className="rounded-[28px] border border-slate-100 bg-white p-8 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Signed in as</p>
             <h4 className="mt-4 text-xl font-bold text-slate-900">{user?.name}</h4>
