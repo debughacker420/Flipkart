@@ -44,7 +44,7 @@ export default function ProductCard({ product, onAddToCart }) {
 
   return (
     <div
-      className="w-[220px] bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group rounded-2xl flex flex-col border border-gray-100/50 hover:border-blue-100 overflow-hidden shrink-0"
+      className="w-full min-w-[140px] max-w-[220px] h-full bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group rounded-2xl flex flex-col border border-gray-100/50 hover:border-blue-100 overflow-hidden"
       onClick={handleCardClick}
     >
       {/* Image Section */}
