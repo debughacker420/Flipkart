@@ -109,6 +109,15 @@ const authSlice = createSlice({
       state.modalMode = action.payload;
       state.error = null;
     },
+    loginSuccess: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.token = action.payload.token;
+      state.user = action.payload.user;
+      state.isAuthenticated = true;
+      state.initialized = true;
+      state.isLoginModalOpen = false;
+    },
     logout: (state) => {
       state.token = null;
       state.user = null;
@@ -171,6 +180,7 @@ export const {
   openLoginModal,
   closeLoginModal,
   switchModalMode,
+  loginSuccess,
   logout,
   clearAuthError,
 } = authSlice.actions;

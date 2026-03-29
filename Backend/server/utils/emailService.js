@@ -254,4 +254,72 @@ async function sendOrderConfirmationEmail(toEmail, toName, order) {
   }
 }
 
-module.exports = { sendOrderConfirmationEmail }
+// ════════════════════════════════════════
+// OTP VERIFICATION EMAIL
+// ════════════════════════════════════════
+
+async function sendVerificationOTP(toEmail, toName, otp) {
+  const html = `<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"></head>
+<body style="margin:0;padding:0;background:#F1F3F6;font-family:Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F3F6;padding:30px 0;">
+  <tr><td align="center">
+  <table width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;">
+
+    <!-- Header -->
+    <tr>
+      <td style="background:#2874F0;padding:20px 32px;border-radius:4px 4px 0 0;">
+        <span style="color:#fff;font-size:22px;font-weight:bold;font-style:italic;">Flipkart</span>
+        <span style="color:#F9A825;font-size:10px;display:block;margin-top:2px;">★ Explore Plus</span>
+      </td>
+    </tr>
+
+    <!-- Body -->
+    <tr>
+      <td style="background:#fff;padding:36px 32px;text-align:center;">
+        <div style="font-size:15px;color:#212121;font-weight:bold;">Hi ${toName},</div>
+        <div style="font-size:13px;color:#878787;margin-top:8px;">Use the OTP below to verify your email address.</div>
+
+        <!-- OTP Box -->
+        <div style="margin:28px auto;display:inline-block;background:#F5F7FF;border:2px dashed #2874F0;border-radius:8px;padding:18px 40px;">
+          <div style="font-size:36px;font-weight:bold;letter-spacing:10px;color:#2874F0;">${otp}</div>
+        </div>
+
+        <div style="font-size:13px;color:#878787;margin-top:4px;">This OTP is valid for <strong style="color:#212121;">10 minutes</strong>.</div>
+        <div style="font-size:12px;color:#b0b0b0;margin-top:16px;">If you didn't create a Flipkart account, you can safely ignore this email.</div>
+      </td>
+    </tr>
+
+    <!-- Footer -->
+    <tr>
+      <td style="background:#172337;padding:16px 32px;border-radius:0 0 4px 4px;text-align:center;">
+        <div style="color:#9e9e9e;font-size:11px;">© 2024 Flipkart Clone · Do not reply to this email</div>
+      </td>
+    </tr>
+
+  </table>
+  </td></tr>
+  </table>
+</body>
+</html>`;
+
+  const mailOptions = {
+    from: process.env.EMAIL_FROM,
+    to: `${toName} <${toEmail}>`,
+    subject: `${otp} is your Flipkart verification OTP`,
+    html,
+    text: `Your Flipkart verification OTP is ${otp}. It expires in 10 minutes. Do not share it with anyone.`,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('📧 OTP email sent:', info.messageId);
+    return { success: true };
+  } catch (err) {
+    console.error('❌ OTP email failed:', err.message);
+    return { success: false, error: err.message };
+  }
+}
+
+module.exports = { sendOrderConfirmationEmail, sendVerificationOTP }

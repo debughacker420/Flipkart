@@ -8,7 +8,6 @@ const pool = new Pool({
     : false,
 });
 
-// Execute async validation pipeline upon initial loading map
 const testConnection = async () => {
   try {
     const client = await pool.connect();
@@ -20,7 +19,22 @@ const testConnection = async () => {
   }
 };
 
-testConnection();
+// Add email verification columns if they don't exist yet
+const migrateVerification = async () => {
+  try {
+    await pool.query(`
+      ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS is_verified    BOOLEAN      NOT NULL DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS verification_otp VARCHAR(10),
+        ADD COLUMN IF NOT EXISTS otp_expires_at  TIMESTAMPTZ
+    `);
+    console.log('✅ Verification columns ready');
+  } catch (err) {
+    console.error('⚠️  Verification migration warning:', err.message);
+  }
+};
+
+testConnection().then(migrateVerification);
 
 module.exports = {
   pool,

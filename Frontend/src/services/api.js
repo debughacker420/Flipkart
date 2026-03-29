@@ -106,5 +106,7 @@ export const addAddress = (data) => api.post('/addresses', data);
 export const loginUser = (data) => api.post('/auth/login', data);
 export const registerUser = (data) => api.post('/auth/register', data);
 export const getProfile = () => api.get('/auth/profile');
+export const verifyOtp = (email, otp) => api.post('/auth/verify-otp', { email, otp });
+export const resendOtp = (email) => api.post('/auth/resend-otp', { email });
 
 export default api;
