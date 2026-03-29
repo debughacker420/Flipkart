@@ -22,11 +22,13 @@ const testConnection = async () => {
 // Add email verification columns if they don't exist yet
 const migrateVerification = async () => {
   try {
+    // DEFAULT TRUE so existing users are not locked out — new registrations
+    // explicitly set is_verified = false in the INSERT statement
     await pool.query(`
       ALTER TABLE users
-        ADD COLUMN IF NOT EXISTS is_verified    BOOLEAN      NOT NULL DEFAULT FALSE,
+        ADD COLUMN IF NOT EXISTS is_verified     BOOLEAN      NOT NULL DEFAULT TRUE,
         ADD COLUMN IF NOT EXISTS verification_otp VARCHAR(10),
-        ADD COLUMN IF NOT EXISTS otp_expires_at  TIMESTAMPTZ
+        ADD COLUMN IF NOT EXISTS otp_expires_at   TIMESTAMPTZ
     `);
     console.log('✅ Verification columns ready');
   } catch (err) {
