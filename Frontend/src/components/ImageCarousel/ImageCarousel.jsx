@@ -7,8 +7,8 @@ export default function ImageCarousel({ images = [] }) {
   // Fallback for empty image arrays
   if (!images || images.length === 0) {
     return (
-      <div className="w-[400px] flex-shrink-0">
-        <div className="w-[400px] h-[400px] border border-flipborder flex items-center justify-center bg-white text-flipsecondary text-sm">
+      <div className="w-full max-w-[400px] flex-shrink-0 mx-auto">
+        <div className="w-full aspect-square max-h-[400px] border border-flipborder flex items-center justify-center bg-white text-flipsecondary text-sm">
           No Image Available
         </div>
       </div>
@@ -24,9 +24,9 @@ export default function ImageCarousel({ images = [] }) {
   };
 
   return (
-    <div className="w-[400px] flex-shrink-0 flex flex-col">
+    <div className="w-full max-w-[400px] flex-shrink-0 flex flex-col mx-auto">
       {/* Main Image */}
-      <div className="relative w-[400px] h-[400px] border border-flipborder bg-white group overflow-hidden flex items-center justify-center">
+      <div className="relative w-full aspect-square max-h-[400px] border border-flipborder bg-white group overflow-hidden flex items-center justify-center">
         <img 
           src={images[selectedIndex]} 
           alt={`Product View ${selectedIndex + 1}`} 
