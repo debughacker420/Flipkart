@@ -1,0 +1,287 @@
+{
+  "info": {
+    "name": "Flipkart Clone API",
+    "description": "Complete API collection for Flipkart Clone Backend — Products, Cart, Orders, Addresses",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "PASTE_PRODUCT_UUID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "cartItemId",
+      "value": "PASTE_CART_ITEM_UUID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "PASTE_ORDER_UUID_HERE",
+      "type": "string"
+    },
+    {
+      "key": "addressId",
+      "value": "PASTE_ADDRESS_UUID_HERE",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Products",
+      "description": "Product listing, search, filter, categories, and detail",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "Fetch all products with default pagination (page=1, limit=20)"
+          }
+        },
+        {
+          "name": "Search Products (samsung, price_asc)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?search=samsung&sort=price_asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "search", "value": "samsung" },
+                { "key": "sort", "value": "price_asc" }
+              ]
+            },
+            "description": "Search products by keyword with sort by price ascending"
+          }
+        },
+        {
+          "name": "Filter Products (mobiles, minPrice)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products?category=mobiles&minPrice=10000",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "category", "value": "mobiles" },
+                { "key": "minPrice", "value": "10000" }
+              ]
+            },
+            "description": "Filter products by category slug and minimum price"
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "categories"]
+            },
+            "description": "Fetch all active categories ordered by name"
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            },
+            "description": "Fetch a single product with all images, specifications, and category"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "description": "Cart CRUD — add, update quantity, remove, clear",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Fetch current cart with items, totalAmount, totalMRP, totalDiscount, itemCount"
+          }
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Add a product to cart. Uses ON CONFLICT to increment if already exists."
+          }
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 3\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/{{cartItemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "{{cartItemId}}"]
+            },
+            "description": "Set absolute quantity for a cart item. Validates against stock."
+          }
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/{{cartItemId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "{{cartItemId}}"]
+            },
+            "description": "Remove a single item from cart by cart_item_id"
+          }
+        },
+        {
+          "name": "Clear Entire Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Remove all items from cart for the default user"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "Place orders, list orders, get order details",
+      "item": [
+        {
+          "name": "Place Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"addressId\": \"{{addressId}}\",\n  \"paymentMethod\": \"COD\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Place order from current cart. Runs in a transaction: validates stock, snapshots items, decrements stock, clears cart."
+          }
+        },
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "List all orders for the default user, newest first, with item_count and items array via json_agg"
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Fetch a single order with full address details and all order_items"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Addresses",
+      "description": "Manage delivery addresses",
+      "item": [
+        {
+          "name": "Get All Addresses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "addresses"]
+            },
+            "description": "Fetch all addresses for the default user, default address first"
+          }
+        },
+        {
+          "name": "Add New Address",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Ananya Reddy\",\n  \"phone\": \"9123456789\",\n  \"pincode\": \"560001\",\n  \"addressLine1\": \"No. 7, MG Road\",\n  \"addressLine2\": \"Near Trinity Circle\",\n  \"city\": \"Bangalore\",\n  \"state\": \"Karnataka\",\n  \"type\": \"HOME\",\n  \"isDefault\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/addresses",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "addresses"]
+            },
+            "description": "Create a new delivery address. Validates Indian phone (10 digits) and pincode (6 digits). If isDefault=true, all others are set to false."
+          }
+        }
+      ]
+    }
+  ]
+}

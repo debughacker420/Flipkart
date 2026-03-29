@@ -1,0 +1,26 @@
+/**
+ * Runs the schema.sql file against the connected Neon database
+ * Usage: node server/db/migrate.js
+ */
+require('dotenv').config();
+const fs   = require('fs');
+const path = require('path');
+const { pool } = require('./connection');
+
+async function migrate() {
+  const sql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
+  const client = await pool.connect();
+  try {
+    console.log('⚙️  Running migrations...');
+    await client.query(sql);
+    console.log('✅ Migration complete');
+  } catch (err) {
+    console.error('❌ Migration failed:', err.message);
+    process.exit(1);
+  } finally {
+    client.release();
+    pool.end();
+  }
+}
+
+migrate();
